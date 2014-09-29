@@ -19,7 +19,7 @@ setup(
     author = "Tomster and Ginster",
     author_email = "sudogenes",
     description = ("useless"),
-    license = "BSD",
+    license = "PRIVATE",
     keywords = "example documentation tutorial",
     url = "http://packages.python.org/an_example_pypi_project",
     packages=['package_name',],
@@ -29,6 +29,6 @@ setup(
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Topic :: Utilities",
-        "License :: OSI Approved :: BSD License",
+        "License :: PRIVATE",
     ],
 )
