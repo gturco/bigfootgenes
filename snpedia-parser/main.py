@@ -1,3 +1,5 @@
+from wikitools import wiki
+from wikitools import category
 
 def save_snps():
     """save snps from snpedia"""
