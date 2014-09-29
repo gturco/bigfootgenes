@@ -13,3 +13,7 @@ def snp_info(snp):
     templates = wikicode.filter_templates()
     infobox = templates[0]
 
+    # TODO eval the infobox to get the summary gene info
+    # format as a dictionary
+
+    return {}
