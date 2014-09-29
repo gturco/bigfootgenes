@@ -10,3 +10,4 @@ def save_snps():
         snpedia.append(article.title.lower())
         print article.title
 
+
