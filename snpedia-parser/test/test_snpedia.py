@@ -31,9 +31,15 @@ class TestSnpedia(unittest.TestCase):
 
         data = self.snpedia.expand_templates(template)
 
-        print data
 
         self.assertEqual(data["Chromosome"], 11)
+
+    def parse_smwtable_wikitext(self):
+        text = "{| class=\"sortable smwtable\" width=\"100%\"\n ! Geno \n ! [[Magnitude|Mag]] \n ! Summary\n |-\n\n| [[Rs7412(C;C)|(C;C)]] \n| style=\"background: #ff8080\" | 0 \n| more likely to gain weight if taking olanzapine\n|-\n\n| [[Rs7412(C;T)|(C;T)]] \n| style=\"background: #ffffff\" |  \n| more likely to gain weight if taking olanzapine\n|-\n\n| [[Rs7412(T;T)|(T;T)]] \n| style=\"background: #ffffff\" |  \n| normal\n|-\n\n|}"
+
+        records = self.snpedia.parse_smwtable_wikitext(wikitext)
+
+        self.assertEqual(len(records), 3)
 
 if __name__ == '__main__':
     unittest.main()

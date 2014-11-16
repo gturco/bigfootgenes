@@ -4,6 +4,10 @@ from wikitools import category
 
 from bs4 import BeautifulSoup
 
+from mwlib import dummydb, parser, expander, uparser
+from mwlib.expander import DictDB
+
+import itertools
 import mwparserfromhell
 import urllib
 import requests
@@ -29,7 +33,7 @@ class Snpedia:
         # TODO eval the infobox to get the summary gene info
         # format as a dictionary
 
-        return {infobox: infobox}
+        return {snp: snp, infobox: infobox}
 
     def expand_templates(self, template):
         """Expand templates to get all the detail info"""
@@ -45,18 +49,39 @@ class Snpedia:
         expanded_html = res_json["expandtemplates"]["*"]
 
         infobox_html = BeautifulSoup(expanded_html)
+        wikitext_table = ""
 
         data = {}
 
-        # TODO fix parsing the infobox
-        rows = infobox_html.find_all("tr")
-        print rows
-        for row in rows:
-            cols = row.find_all("td")
-
-            if len(cols) == 2:
-                key = cols[0].get_text()
-                value = cols[1].get_text()
-                data[key] = value
+        # TODO extract the smwtable
+        data['geno_records'] = self.parse_smwtable_wikitext(wikitext_table)
 
         return data
+
+    def parse_smwtable_wikitext(self, wikitext):
+        """wikitext must just be the smwtable format. returns back an array of records"""
+
+        parsed = uparser.simpleparse(wikitext)
+
+        results = parsed.find(parser.Table)
+        if len(results) == 0:
+            return []
+
+        table = results[0]
+
+        keys = []
+        for col in table.children[0].children:
+            keys.append(col.asText().strip())
+
+        records = []
+        for row in itertools.islice(table.children, 1, None):
+            data = []
+            # 3 cols in each row
+            for col in row.children:
+                data.append(col.asText().strip())
+
+            zipped = zip(keys, data)
+            data_dict = dict(zipped)
+            records.append(data_dict)
+
+        return records
