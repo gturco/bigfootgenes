@@ -19,9 +19,6 @@ class SnpediaFetcher:
                 trimmed_snp = snp.strip()
                 if trimmed_snp:
                     print trimmed_snp
-                    try:
-                        result = self.snpedia.get_wikitext(trimmed_snp)
-                        file.write("{}\n".format(result))
-                    except wikitools.page.NoPage:
-                        pass
+                    result = self.snpedia.get_wikitext(trimmed_snp)
+                    file.write("{}\n".format(result))
 

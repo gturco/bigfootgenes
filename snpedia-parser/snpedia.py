@@ -27,9 +27,12 @@ class Snpedia:
     def get_wikitext(self, snp):
         """get the wikitext for a snp"""
         pagehandle = page.Page(self.site, snp)
-        wikitext = pagehandle.getWikiText()
 
-        return {'snp': snp, 'wikitext': wikitext}
+        try:
+            wikitext = pagehandle.getWikiText()
+            return {'snp': snp, 'wikitext': wikitext}
+        except wikitools.page.NoPage:
+            return {'snp': snp, 'wikitext': ""}
 
     def snp_info(self, snp):
         """get all the data for a snp"""
