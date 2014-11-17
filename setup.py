@@ -6,7 +6,10 @@ requires = (
         "flask-sqlalchemy",
         "requests>=0.13.6",
         "python-dateutil>=1.5",
+        "BeautifulSoup",
+        "requests",
         "wikitools",
+        "mwlib",
         "mwparserfromhell"
         )
 

@@ -2,8 +2,15 @@
 
 @sudogenes
 
+## Prereqs
 
-Run
+```
+pip install wikitools BeautifulSoup requests mwparserfromhell
+pip install -i http://pypi.pediapress.com/simple/ mwlib
+```
+
+
+## Run
 
 ```
 python snpedia-parser/write_snp_names.py -f data/snps.txt
