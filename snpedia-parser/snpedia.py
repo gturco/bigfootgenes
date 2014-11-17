@@ -31,7 +31,7 @@ class Snpedia:
         try:
             wikitext = pagehandle.getWikiText()
             return {'snp': snp, 'wikitext': wikitext}
-        except wikitools.page.NoPage:
+        except page.NoPage:
             return {'snp': snp, 'wikitext': ""}
 
     def snp_info(self, snp):
