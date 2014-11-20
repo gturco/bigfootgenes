@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from mwlib import dummydb, parser, expander, uparser
 from mwlib.expander import DictDB
 
+import re
 import itertools
 import mwparserfromhell
 import urllib
@@ -43,15 +44,13 @@ class Snpedia:
         templates = wikicode.filter_templates()
         infobox = templates[0]
 
-        data = self.expand_templates(infobox)
+        data = self.expand_infobox(infobox)
+        record = {'snp': snp}
 
-        # TODO eval the infobox to get the summary gene info
-        # format as a dictionary
+        return dict(record.items() + data.items())
 
-        return {'snp': snp, 'infobox': infobox, 'data': data}
-
-    def expand_templates(self, template):
-        """Expand templates to get all the detail info"""
+    def expand_infobox(self, template):
+        """Expand infobox to get all the detail info"""
 
         options = {"action": "expandtemplates", "format": "json", "text": template}
 
@@ -62,13 +61,25 @@ class Snpedia:
         res_json = json.loads(res.text)
         expanded_html = res_json["expandtemplates"]["*"]
 
-        infobox_html = BeautifulSoup(expanded_html)
-        # TODO get the orientation
+        # get orientation
+        orientation_pattern = re.compile('\[\[Orientation::([a-z]+)\]\]')
+        orientation_matches = orientation_pattern.search(expanded_html)
+        if orientation_matches and orientation_matches.groups():
+            orientation = orientation_matches.groups()[0]
+        else:
+            orientation = None
 
-        # TODO extract the smwtable
+        # extract the smwtable
+        smwtable_pattern = re.compile('\[\[SMW::off\]\](.*)\[\[SMW::on\]\]', re.DOTALL)
+        smwtable_matches = smwtable_pattern.search(expanded_html)
+
         wikitext_table = ""
+        if smwtable_matches and smwtable_matches.groups():
+            wikitext_table = smwtable_matches.groups()[0]
 
         data = {}
+        if orientation:
+            data['orientation'] = orientation
         data['geno_records'] = self.parse_smwtable_wikitext(wikitext_table)
 
         return data
