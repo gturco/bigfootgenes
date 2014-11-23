@@ -93,17 +93,33 @@ class Snpedia:
         if orientation:
             data['orientation'] = orientation
         data['geno_records'] = self.parse_smwtable_wikitext(wikitext_table)
-        data['geno_records'] = [self.normalize_geno_record(x) for x in data['geno_records']]
+        data['geno_records'] = [self.normalize_geno_record(x, orientation) for x in data['geno_records']]
 
         return data
 
-    def normalize_geno_record(self, record):
+    def normalize_geno_record(self, record, orientation):
         """remove extra characters"""
 
         if record.has_key("Geno"):
             record["Geno"] = record["Geno"].replace("(", "").replace(";", "").replace(")", "")
 
+            if orientation == "minus":
+                record["Geno"] = self.reverse_complement(record["Geno"])
+
         return record
+
+    def reverse_complement(self, genotype):
+        """apply a reverse comp. to the genotype, see http://www.snpedia.com/index.php/Orientation"""
+
+        reverse_map = {'A': 'T', 'G': 'C', 'C': 'G', 'T': 'A'}
+
+        reversed = ""
+        for c in genotype:
+            reversed += reverse_map[c]
+
+        # QUESTION: do i need to flip the reversed after applying the reverse_map?
+
+        return reversed
 
     def parse_smwtable_wikitext(self, wikitext):
         """wikitext must just be the smwtable format. returns back an array of records"""

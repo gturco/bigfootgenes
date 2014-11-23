@@ -29,7 +29,7 @@ check snpedia's data for rs4477212
 
 if orientation is plus
 
-else if orientation is negative
+else if orientation is minus
 reverse complement the AA 23andme
 
 A => T

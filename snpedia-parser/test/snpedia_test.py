@@ -25,6 +25,16 @@ class TestSnpedia(unittest.TestCase):
         # self.assertEqual(results['snp'], snp)
         # self.assertEqual(results['orientation'], 'plus')
 
+    def test_snp_info_with_minus_orientation(self):
+        # pass
+        snp = "rs1801133"
+        results = self.snpedia.snp_info(snp)
+        self.assertEqual(results['snp'], snp)
+        self.assertEqual(results['orientation'], 'minus')
+        # test reverse complement on minus orientation
+        self.assertEqual(results['geno_records'][0]['Geno'], 'GG')
+
+        print results
 
     def test_snp_info_from_wikitext(self):
         #pass
