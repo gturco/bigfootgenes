@@ -1,5 +1,7 @@
 import sys
+import os
 sys.path.append("./..")
+import json
 import unittest
 from snpedia import Snpedia
 
@@ -17,9 +19,35 @@ class TestSnpedia(unittest.TestCase):
         #self.assertTrue(len(snps) > 0)
 
     def test_snp_info(self):
+        pass
+        # snp = "rs7412"
+        # results = self.snpedia.snp_info(snp)
+        # self.assertEqual(results['snp'], snp)
+        # self.assertEqual(results['orientation'], 'plus')
+
+
+    def test_snp_info_from_wikitext(self):
         #pass
         snp = "rs7412"
-        results = self.snpedia.snp_info(snp)
+
+        line = "{}"
+        test_file_path = os.path.dirname(os.path.realpath(__file__)) + "/../../data/rs7412.py"
+        # json file
+        #test_file_path = os.path.dirname(os.path.realpath(__file__)) + "/../../data/rs7412.json"
+
+        with open(test_file_path, "r") as f:
+            line = f.read()
+
+        # TODO use json.loads instead of eval when
+        # you convert the wikitext data files to proper json
+        snp_data = eval(line)
+        snp = snp_data['snp']
+        wikitext = snp_data['wikitext']
+
+        results = self.snpedia.snp_info_from_wikitext(snp, wikitext)
+
+        print results
+
         self.assertEqual(results['snp'], snp)
         self.assertEqual(results['orientation'], 'plus')
 

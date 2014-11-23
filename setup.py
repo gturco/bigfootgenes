@@ -8,9 +8,10 @@ requires = (
         "python-dateutil>=1.5",
         "beautifulsoup4",
         "requests",
+        "mysql-connector-python",
         "wikitools",
         "mwlib",
-        "mwparserfromhell"
+        "mwparserfromhell",
         )
 
 def read(fname):

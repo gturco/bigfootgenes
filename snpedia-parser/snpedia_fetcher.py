@@ -1,5 +1,7 @@
 from snpedia import Snpedia
 
+import json
+
 class SnpediaFetcher:
     def __init__(self):
         """docstring for __init__"""
@@ -20,5 +22,5 @@ class SnpediaFetcher:
                 if trimmed_snp:
                     print trimmed_snp
                     result = self.snpedia.get_wikitext(trimmed_snp)
-                    file.write("{}\n".format(result))
+                    file.write("{}\n".format(json.dumps(result)))
 

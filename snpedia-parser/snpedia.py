@@ -49,6 +49,18 @@ class Snpedia:
 
         return dict(record.items() + data.items())
 
+    def snp_info_from_wikitext(self, snp, wikitext):
+        """get all the data for a snp"""
+
+        wikicode = mwparserfromhell.parse(wikitext)
+        templates = wikicode.filter_templates()
+        infobox = templates[0]
+
+        data = self.expand_infobox(infobox)
+        record = {'snp': snp}
+
+        return dict(record.items() + data.items())
+
     def expand_infobox(self, template):
         """Expand infobox to get all the detail info"""
 
@@ -81,8 +93,17 @@ class Snpedia:
         if orientation:
             data['orientation'] = orientation
         data['geno_records'] = self.parse_smwtable_wikitext(wikitext_table)
+        data['geno_records'] = [self.normalize_geno_record(x) for x in data['geno_records']]
 
         return data
+
+    def normalize_geno_record(self, record):
+        """remove extra characters"""
+
+        if record.has_key("Geno"):
+            record["Geno"] = record["Geno"].replace("(", "").replace(";", "").replace(")", "")
+
+        return record
 
     def parse_smwtable_wikitext(self, wikitext):
         """wikitext must just be the smwtable format. returns back an array of records"""
