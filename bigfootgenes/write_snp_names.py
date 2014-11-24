@@ -8,11 +8,10 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    fetcher = SnpediaFetcher()
-
     if not options.output:
         parser.error("Missing output")
 
+    fetcher = SnpediaFetcher()
     fetcher.write_all_snps(options.output)
 
 if __name__ == '__main__':

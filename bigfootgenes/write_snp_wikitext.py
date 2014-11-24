@@ -12,13 +12,13 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    fetcher = SnpediaFetcher()
-
     if not options.input:
         parser.error("Missing input")
 
     if not options.output:
         parser.error("Missing output")
+
+    fetcher = SnpediaFetcher()
 
     with open(options.input) as f:
         snps = f.readlines()

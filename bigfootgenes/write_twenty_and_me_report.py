@@ -1,5 +1,6 @@
 from optparse import OptionParser
-from snpedia_store import SnpediaStore
+from twenty_three_and_me import TwentyThreeAndMe
+import json
 
 def main():
     parser = OptionParser()
@@ -17,11 +18,16 @@ def main():
     if not options.output:
         parser.error("Missing output")
 
-    store = SnpediaStore()
+    twenty_three_and_me = TwentyThreeAndMe()
 
-    store.write_mysql_insert_file(options.input, options.output)
+    data = twenty_three_and_me.parse_23andme_file(options.input)
+    matches = twenty_three_and_me.get_snp_matches(data)
+
+    with open(options.output, 'w') as file:
+        for match in matches:
+            file.write("{}\n".format(json.dumps(match)))
 
 if __name__ == '__main__':
     # example
-    # python bigfootgenes/write_mysql_insert_file.py -i data/wikitext/snp-aa -o data/mysql/insert-snp-aa.sql
+    # python bigfootgenes/write_twenty_three_and_me_report.py -i data/genome_Tommy_Chheng_Full_20140920095607.txt -o data/genome_tommy_chheng_snp_matches.txt
     main()
