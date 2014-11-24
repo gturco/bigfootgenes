@@ -33,14 +33,15 @@ class SnpediaStore:
 
         cursor.close()
 
-    def import_data(self, snp_data_file):
+    def create_insert_mysql_file(self, snp_data_file, mysql_output_file):
         """snp_data_file is created from \
         SnpediaFetcher.write_snp_wikitext_to_file"""
 
-        with open(snp_data_file, 'r') as file:
-            for line in file:
-                mysql_insert_stmt = self.create_mysql_insert_stmt_from_snpedia_data_line(line)
-                print mysql_insert_stmt
+        with open(mysql_output_file, 'w') as output_file:
+            with open(snp_data_file, 'r') as input_file:
+                for line in input_file:
+                    mysql_insert_stmt = self.create_mysql_insert_stmt_from_snpedia_data_line(line)
+                    output_file.write(mysql_insert_stmt + "\n")
 
 
     def create_mysql_insert_stmt_from_snpedia_data_line(self, line):
