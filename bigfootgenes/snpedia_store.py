@@ -62,7 +62,7 @@ class SnpediaStore:
         mysql_stmt = "";
         for geno in record['geno_records']:
             if len(geno) > 0:
-                stmt = "INSERT INTO snps(rsid,genotype,summary) VALUES(\"{0}\",\"{1}\",\"{2}\");".format(snp, geno['Geno'], geno['Summary'])
+                stmt = u"INSERT INTO snps(rsid,genotype,summary) VALUES(\"{0}\",\"{1}\",\"{2}\");".format(snp, geno['Geno'], geno['Summary'])
                 mysql_stmt += stmt;
 
         return mysql_stmt
