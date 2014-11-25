@@ -56,6 +56,9 @@ class SnpediaStore:
 
         record = self.snpedia.snp_info_from_wikitext(snp, wikitext)
 
+        if not record.has_key('geno_records'):
+            return ""
+
         mysql_stmt = "";
         for geno in record['geno_records']:
             if len(geno) > 0:
