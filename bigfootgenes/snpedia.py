@@ -40,23 +40,20 @@ class Snpedia:
 
         pagehandle = page.Page(self.site, snp)
         wikitext = pagehandle.getWikiText()
-        wikicode = mwparserfromhell.parse(wikitext)
-        templates = wikicode.filter_templates()
-        infobox = templates[0]
 
-        data = self.expand_infobox(infobox)
-        record = {'snp': snp}
-
-        return dict(record.items() + data.items())
+        return snp_info_from_wikitext(snp, wikitext)
 
     def snp_info_from_wikitext(self, snp, wikitext):
         """get all the data for a snp"""
 
         wikicode = mwparserfromhell.parse(wikitext)
         templates = wikicode.filter_templates()
-        infobox = templates[0]
 
-        data = self.expand_infobox(infobox)
+        data = {}
+        if len(templates) > 0:
+            infobox = templates[0]
+            data = self.expand_infobox(infobox)
+
         record = {'snp': snp}
 
         return dict(record.items() + data.items())
