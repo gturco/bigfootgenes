@@ -18,7 +18,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name = "Package Name",
+    name = "bigfootgenes",
     version = "0.0.1",
     author = "Tomster and Ginster",
     author_email = "sudogenes",

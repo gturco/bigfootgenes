@@ -33,7 +33,7 @@ class SnpediaStore:
 
         cursor.close()
 
-    def create_insert_mysql_file(self, snp_data_file, mysql_output_file):
+    def write_insert_mysql_file(self, snp_data_file, mysql_output_file):
         """snp_data_file is created from \
         SnpediaFetcher.write_snp_wikitext_to_file"""
 
