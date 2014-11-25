@@ -63,5 +63,20 @@ time python write_mysql_insert_file.py -i ../data/wikitext/snp-al -o ../data/mys
 ```
 
 ```
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-aa.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-ab.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-ac.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-ad.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-ae.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-af.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-ag.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-ah.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-ai.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-aj.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-ak.sql
+time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < data/mysql/insert-snp-al.sql
+```
+
+```
 python write_twenty_three_and_me_report.py -i ../data/genome_Tommy_Chheng_Full_20140920095607.txt -o ../data/genome_tommy_chheng_snp_matches.txt
 ```
