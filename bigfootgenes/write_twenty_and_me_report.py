@@ -29,5 +29,5 @@ def main():
 
 if __name__ == '__main__':
     # example
-    # python bigfootgenes/write_twenty_three_and_me_report.py -i data/genome_Tommy_Chheng_Full_20140920095607.txt -o data/genome_tommy_chheng_snp_matches.txt
+    # python write_twenty_three_and_me_report.py -i ../data/genome_Tommy_Chheng_Full_20140920095607.txt -o ../data/genome_tommy_chheng_snp_matches.txt
     main()

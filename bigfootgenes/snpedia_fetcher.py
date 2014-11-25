@@ -20,7 +20,6 @@ class SnpediaFetcher:
             for snp in snps:
                 trimmed_snp = snp.strip()
                 if trimmed_snp:
-                    print trimmed_snp
                     result = self.snpedia.get_wikitext(trimmed_snp)
                     file.write("{}\n".format(json.dumps(result)))
 

@@ -112,7 +112,8 @@ class Snpedia:
 
         reversed = ""
         for c in genotype:
-            reversed += reverse_map[c]
+            if reverse_map.has_key(c): reversed += reverse_map[c]
+            else: print "Error calling reverse complement for {0}".format(genotype)
 
         # QUESTION: do i need to flip the reversed after applying the reverse_map?
 
