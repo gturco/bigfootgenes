@@ -61,7 +61,7 @@ class Snpedia:
     def expand_infobox(self, template):
         """Expand infobox to get all the detail info"""
 
-        options = {"action": "expandtemplates", "format": "json", "text": template}
+        options = {"action": "expandtemplates", "format": "json", "text": template.encode('utf-8')}
 
         url_encoded_template = urllib.urlencode(options)
         url = self.base_url + "?" + url_encoded_template

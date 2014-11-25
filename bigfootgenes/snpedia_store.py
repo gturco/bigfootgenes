@@ -40,8 +40,10 @@ class SnpediaStore:
         with open(mysql_output_file, 'w') as output_file:
             with open(snp_data_file, 'r') as input_file:
                 for line in input_file:
+                    # TODO add try-except to ignore errors
                     mysql_insert_stmt = self.create_mysql_insert_stmt_from_snpedia_data_line(line)
-                    output_file.write(mysql_insert_stmt + "\n")
+                    if mysql_insert_stmt:
+                        output_file.write(mysql_insert_stmt + "\n")
 
 
     def create_mysql_insert_stmt_from_snpedia_data_line(self, line):
