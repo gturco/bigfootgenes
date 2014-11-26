@@ -13,6 +13,7 @@ import mwparserfromhell
 import urllib
 import requests
 import json
+import logging
 
 class Snpedia:
     def __init__(self):
@@ -41,7 +42,7 @@ class Snpedia:
         pagehandle = page.Page(self.site, snp)
         wikitext = pagehandle.getWikiText()
 
-        return snp_info_from_wikitext(snp, wikitext)
+        return self.snp_info_from_wikitext(snp, wikitext)
 
     def snp_info_from_wikitext(self, snp, wikitext):
         """get all the data for a snp"""
@@ -113,7 +114,7 @@ class Snpedia:
         reversed = ""
         for c in genotype:
             if reverse_map.has_key(c): reversed += reverse_map[c]
-            else: print "Error calling reverse complement for {0}".format(genotype)
+            else: logging.error("Error calling reverse complement for {0}".format(genotype))
 
         # QUESTION: do i need to flip the reversed after applying the reverse_map?
 

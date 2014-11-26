@@ -19,11 +19,12 @@ class TestSnpedia(unittest.TestCase):
         #self.assertTrue(len(snps) > 0)
 
     def test_snp_info(self):
-        pass
+        # pass
         # snp = "rs7412"
-        # results = self.snpedia.snp_info(snp)
-        # self.assertEqual(results['snp'], snp)
-        # self.assertEqual(results['orientation'], 'plus')
+        snp = "rs11984145"
+        results = self.snpedia.snp_info(snp)
+        self.assertEqual(results['snp'], snp)
+        self.assertEqual(results['orientation'], 'plus')
 
     def test_snp_info_with_minus_orientation(self):
         # pass

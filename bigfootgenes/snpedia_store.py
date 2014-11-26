@@ -1,5 +1,6 @@
 import json
 import mysql.connector
+import logging
 
 from contextlib import closing
 from mysql.connector import errorcode
@@ -38,8 +39,9 @@ class SnpediaStore:
             for line in input_file:
                 try:
                     self.insert_snp(line)
-                except Exception:
-                    print "Error inserting: {0}\n".format(line)
+                except Exception as detail:
+                    logging.error("Error inserting: {0}\n".format(line))
+                    logging.error(detail)
 
     def insert_snp(self, line):
         """line is created from write_snp_wikitext.py"""
@@ -61,44 +63,9 @@ class SnpediaStore:
 
             stmt = u"""INSERT INTO snps(rsid,genotype,summary) VALUES(%s, %s, %s);"""
             with closing(self.cnx.cursor()) as cur:
-                cur.execute(query, (snp, geno['Geno'], geno['Summary']))
+                logging.info("Inserting {0}".format(snp))
+                cur.execute(stmt, (snp, geno['Geno'], geno['Summary']))
 
         self.cnx.commit()
 
         return True
-
-    def write_mysql_insert_file(self, snp_data_file, mysql_output_file):
-        """snp_data_file is created from \
-        SnpediaFetcher.write_snp_wikitext_to_file"""
-
-        with open(mysql_output_file, 'w') as output_file:
-            with open(snp_data_file, 'r') as input_file:
-                for line in input_file:
-                    # TODO add try-except to ignore errors
-                    mysql_insert_stmt = self.create_mysql_insert_stmt_from_snpedia_data_line(line)
-                    if mysql_insert_stmt:
-                        output_file.write(mysql_insert_stmt + "\n")
-
-    def create_mysql_insert_stmt_from_snpedia_data_line(self, line):
-        """docstring for create_mysql_insert_stmt_from_snpedia"""
-
-        # TODO when we switch the data format to real json, use json.loads instead of eval
-        # snp_data = json.loads(line)
-        snp_data = eval(line)
-
-        snp = snp_data['snp']
-        wikitext = snp_data['wikitext']
-
-        record = self.snpedia.snp_info_from_wikitext(snp, wikitext)
-
-        if not record.has_key('geno_records'):
-            return ""
-
-        mysql_stmt = "";
-        for geno in record['geno_records']:
-            if len(geno) > 0:
-                escaped_summary = geno['Summary'].replace("\"", "\\\"")
-                stmt = u"""INSERT INTO snps(rsid,genotype,summary) VALUES("{0}","{1}","{2}");""".format(snp, geno['Geno'], escaped_summary)
-                mysql_stmt += stmt;
-
-        return mysql_stmt
