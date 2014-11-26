@@ -33,6 +33,40 @@ class SnpediaStore:
 
         cursor.close()
 
+    def import_snps(self, snp_data_file):
+        """snp_data_file is created from write_snp_wikitext_to_file.py"""
+
+        with open(snp_data_file, 'r') as input_file:
+            for line in input_file:
+                try:
+                    self.insert_snp(line)
+                except Exception:
+                    print "Error inserting: {0}\n" % line
+
+    def insert_snp(self, line):
+        """line is created from write_snp_wikitext.py"""
+
+        # TODO when we switch the data format to real json, use json.loads instead of eval
+        # snp_data = json.loads(line)
+        snp_data = eval(line)
+
+        snp = snp_data['snp']
+        wikitext = snp_data['wikitext']
+
+        record = self.snpedia.snp_info_from_wikitext(snp, wikitext)
+
+        if not record.has_key('geno_records'):
+            return ""
+
+        cursor = self.cnx.cursor()
+
+        for geno in record['geno_records']:
+            if len(geno) > 0:
+                stmt = u"""INSERT INTO snps(rsid,genotype,summary) VALUES(?, ?, ?);"""
+                cursor.execute(query, (snp, geno['Geno'], geno['Summary']))
+
+        cursor.close()
+
     def write_mysql_insert_file(self, snp_data_file, mysql_output_file):
         """snp_data_file is created from \
         SnpediaFetcher.write_snp_wikitext_to_file"""
@@ -44,7 +78,6 @@ class SnpediaStore:
                     mysql_insert_stmt = self.create_mysql_insert_stmt_from_snpedia_data_line(line)
                     if mysql_insert_stmt:
                         output_file.write(mysql_insert_stmt + "\n")
-
 
     def create_mysql_insert_stmt_from_snpedia_data_line(self, line):
         """docstring for create_mysql_insert_stmt_from_snpedia"""

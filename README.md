@@ -44,39 +44,20 @@ time python write_snp_wikitext.py -i ../data/snps-split/snp-aa -o ../data/wikite
 ```
 
 ```
-python write_snp_wikitext.py -i ../data/snps_test.txt -o ../data/snps_test_wikitext.txt
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-aa
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ab
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ac
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ad
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ae
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-af
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ag
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ah
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ai
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-aj
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ak
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-al
 ```
 
 ```
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-aa -o ../data/mysql/insert-snp-aa.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-ab -o ../data/mysql/insert-snp-ab.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-ac -o ../data/mysql/insert-snp-ac.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-ad -o ../data/mysql/insert-snp-ad.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-ae -o ../data/mysql/insert-snp-ae.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-af -o ../data/mysql/insert-snp-af.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-ag -o ../data/mysql/insert-snp-ag.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-ah -o ../data/mysql/insert-snp-ah.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-ai -o ../data/mysql/insert-snp-ai.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-aj -o ../data/mysql/insert-snp-aj.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-ak -o ../data/mysql/insert-snp-ak.sql
-time python write_mysql_insert_file.py -i ../data/wikitext/snp-al -o ../data/mysql/insert-snp-al.sql
-```
-
-```
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-aa.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-ab.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-ac.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-ad.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-ae.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-af.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-ag.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-ah.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-ai.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-aj.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-ak.sql
-time mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development < ../data/mysql/insert-snp-al.sql
-```
-
-```
-python write_23andme_report.py -i ../data/genome_Tommy_Chheng_Full_20140920095607.txt -o ../data/genome_tommy_chheng_snp_matches.txt
+time python write_23andme_report.py -i ../data/genome_Tommy_Chheng_Full_20140920095607.txt -o ../data/genome_tommy_chheng_snp_matches.txt
 ```
