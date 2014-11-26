@@ -44,18 +44,18 @@ time python write_snp_wikitext.py -i ../data/snps-split/snp-aa -o ../data/wikite
 ```
 
 ```
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-aa
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-ab
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-ac
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-ad
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-ae
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-af
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-ag
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-ah
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-ai
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-aj
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-ak
-time python import_snps_to_mysql.py -i ../data/wikitext/snp-al
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-aa > aa.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ab > ab.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ac > ac.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ad > aa.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ae > ae.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-af > af.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ag > ag.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ah > ah.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ai > ai.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-aj > aj.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-ak > ak.log
+time python import_snps_to_mysql.py -i ../data/wikitext/snp-al > al.log
 ```
 
 ```

@@ -41,7 +41,7 @@ class SnpediaStore:
                 try:
                     self.insert_snp(line)
                 except Exception:
-                    print "Error inserting: {0}\n" % line
+                    print "Error inserting: {0}\n".format(line)
 
     def insert_snp(self, line):
         """line is created from write_snp_wikitext.py"""
