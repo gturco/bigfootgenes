@@ -8,6 +8,7 @@ from snpedia import Snpedia
 
 class SnpediaStore:
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
         self.snpedia = Snpedia()
 
         self.config = {
@@ -40,8 +41,8 @@ class SnpediaStore:
                 try:
                     self.insert_snp(line)
                 except Exception as detail:
-                    logging.error("Error inserting: {0}\n".format(line))
-                    logging.error(detail)
+                    self.logger.error("Error inserting: {0}\n".format(line))
+                    self.logger.error(detail)
 
     def insert_snp(self, line):
         """line is created from write_snp_wikitext.py"""
@@ -63,7 +64,7 @@ class SnpediaStore:
 
             stmt = u"""INSERT INTO snps(rsid,genotype,summary) VALUES(%s, %s, %s);"""
             with closing(self.cnx.cursor()) as cur:
-                logging.info("Inserting {0}".format(snp))
+                self.logger.info("Inserting {0}".format(snp))
                 cur.execute(stmt, (snp, geno['Geno'], geno['Summary']))
 
         self.cnx.commit()

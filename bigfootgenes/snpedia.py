@@ -17,6 +17,7 @@ import logging
 
 class Snpedia:
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
         self.base_url = "http://bots.snpedia.com/api.php"
         self.site = wiki.Wiki(self.base_url)
 
@@ -114,7 +115,7 @@ class Snpedia:
         reversed = ""
         for c in genotype:
             if reverse_map.has_key(c): reversed += reverse_map[c]
-            else: logging.error("Error calling reverse complement for {0}".format(genotype))
+            else: self.logger.error("Error calling reverse complement for {0}".format(genotype))
 
         # QUESTION: do i need to flip the reversed after applying the reverse_map?
 
