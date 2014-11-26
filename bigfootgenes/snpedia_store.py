@@ -1,6 +1,7 @@
 import json
 import mysql.connector
 
+from contextlib import closing
 from mysql.connector import errorcode
 from snpedia import Snpedia
 
@@ -24,14 +25,11 @@ class SnpediaStore:
         query = ("SELECT rsid, genotype, summary FROM snps "
                  "WHERE rsid = %s AND genotype = %s")
 
-        cursor = self.cnx.cursor()
-        cursor.execute(query, (rsid, genotype))
-
-        for (rsid, genotype, summary) in cursor:
-            record = {'rsid': rsid, 'genotype': genotype, 'summary': summary}
-            yield record
-
-        cursor.close()
+        with closing(self.cnx.cursor()) as cur:
+            cur.execute(query, (rsid, genotype))
+            for (rsid, genotype, summary) in cursor:
+                record = {'rsid': rsid, 'genotype': genotype, 'summary': summary}
+                yield record
 
     def import_snps(self, snp_data_file):
         """snp_data_file is created from write_snp_wikitext_to_file.py"""
@@ -56,16 +54,18 @@ class SnpediaStore:
         record = self.snpedia.snp_info_from_wikitext(snp, wikitext)
 
         if not record.has_key('geno_records'):
-            return ""
-
-        cursor = self.cnx.cursor()
+            return False
 
         for geno in record['geno_records']:
-            if len(geno) > 0:
-                stmt = u"""INSERT INTO snps(rsid,genotype,summary) VALUES(?, ?, ?);"""
-                cursor.execute(query, (snp, geno['Geno'], geno['Summary']))
+            if len(geno) == 0: continue
 
-        cursor.close()
+            stmt = u"""INSERT INTO snps(rsid,genotype,summary) VALUES(?, ?, ?);"""
+            with closing(self.cnx.cursor()) as cur:
+                cur.execute(query, (snp, geno['Geno'], geno['Summary']))
+
+        self.cnx.commit()
+
+        return True
 
     def write_mysql_insert_file(self, snp_data_file, mysql_output_file):
         """snp_data_file is created from \
