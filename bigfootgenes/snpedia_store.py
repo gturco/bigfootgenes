@@ -59,7 +59,7 @@ class SnpediaStore:
         for geno in record['geno_records']:
             if len(geno) == 0: continue
 
-            stmt = u"""INSERT INTO snps(rsid,genotype,summary) VALUES(?, ?, ?);"""
+            stmt = u"""INSERT INTO snps(rsid,genotype,summary) VALUES(%s, %s, %s);"""
             with closing(self.cnx.cursor()) as cur:
                 cur.execute(query, (snp, geno['Geno'], geno['Summary']))
 
