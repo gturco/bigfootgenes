@@ -27,7 +27,7 @@ pip install -i http://pypi.pediapress.com/simple/ mwlib
 mysql -ubigfootgenes -pdk34DFko99FDOQ bigfootgenes_development
 ```
 
-## Run
+## Run data processing
 
 ```
 mysql -uroot -p < data/mysql/schema.sql
@@ -67,3 +67,35 @@ time python import_snps_to_mysql.py -i ../data/wikitext/snp-al > al.log
 ```
 time python write_23andme_report.py -i ../data/genome_Tommy_Chheng_Full_20140920095607.txt -o ../data/genome_tommy_chheng_snp_matches.txt
 ```
+
+## Webapp
+
+### Setup
+
+Second, let's download `pip`, `virtualenv`, `foreman`, and the [`heroku`
+Ruby gem](http://devcenter.heroku.com/articles/using-the-cli).
+
+    $ sudo easy_install pip
+    $ sudo pip install virtualenv
+    $ sudo gem install foreman heroku
+
+Now, you can setup an isolated environment with `virtualenv`.
+
+    $ virtualenv --no-site-packages env
+    $ source env/bin/activate
+
+Then, let's get the requirements installed in your isolated test
+environment.
+
+    $ pip install -r requirements.txt
+
+### Running Your Application
+
+Now, you can run the application locally.
+
+    $ foreman start
+
+You can also specify what port you'd prefer to use.
+
+    $ foreman start -p 5555
+
