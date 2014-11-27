@@ -27,12 +27,11 @@ class SnpediaStore:
         query = ("SELECT rsid, genotype, summary FROM snps "
                  "WHERE rsid = %s AND genotype = %s")
 
-        cur = self.cnx.cursor()
-        cur.execute(query, (rsid, genotype))
-        for (rsid, genotype, summary) in cursor:
-            record = {'rsid': rsid, 'genotype': genotype, 'summary': summary}
-            yield record
-        cur.close()
+        with closing(self.cnx.cursor()) as cur:
+            cur.execute(query, (rsid, genotype))
+            for (rsid, genotype, summary) in cur:
+                record = {'rsid': rsid, 'genotype': genotype, 'summary': summary}
+                yield record
 
     def import_snps(self, snp_data_file):
         """snp_data_file is created from write_snp_wikitext_to_file.py"""
