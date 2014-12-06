@@ -70,3 +70,26 @@ class SnpediaStore:
         self.cnx.commit()
 
         return True
+
+    def delete_not_enough_info_snps(self):
+        """Snps with no summary or not enough info should be deleted for a cleaner user report."""
+
+        stmt = u"""DELETE FROM snps WHERE
+                summary = ''
+                OR summary = 'common in clinvar'
+                OR summary = 'common in complete genomics'
+                OR summary = 'common'
+                OR summary = 'common on affy axiom data'
+                OR summary = '?'
+                OR summary = 'None'
+                OR summary = 'normal'
+                OR summary = 'normal risk'
+                OR summary = 'normal/common'
+                OR summary = 'average';"""
+
+        with closing(self.cnx.cursor()) as cur:
+            cur.execute(stmt)
+
+        self.cnx.commit()
+
+

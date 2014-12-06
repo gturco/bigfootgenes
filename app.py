@@ -43,9 +43,17 @@ def create():
 
         # TODO queue up task or run in thread?
         output = os.path.join(app.config['SNP_REPORT_OUTPUT_FOLDER'], filename)
-        "python write_twenty_three_and_me_report.py -i {0} -o {1}".format(path, output)
 
-    return render_template('23andme/queued.html')
+        # import subprocess
+        # cmd = "python write_twenty_three_and_me_report.py -i {0} -o {1}".format(path, output)
+        # output = subprocess.check_output(cmd, shell=True)
+
+    return render_template('queued.html')
+
+@app.route('/snps/report')
+def get():
+    snps = {count: 0, records: [{'rsid': '23423', 'summary': 'This is a test'}]}
+    return render_template('snps/report.html', snps=snps)
 
 @app.errorhandler(404)
 def page_not_found(error):

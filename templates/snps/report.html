@@ -1,0 +1,17 @@
+<html>
+
+<head>
+    <title>Snp Report</title>
+</head>
+
+<body>
+23andme
+
+{% for item in (snps['records'] or []) %}
+
+<h5>{{item['summary']}}</h5>
+
+{% endfor %}
+
+</body>
+</html>
