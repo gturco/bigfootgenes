@@ -52,7 +52,15 @@ def create():
 
 @app.route('/snps/report')
 def get():
-    snps = {count: 0, records: [{'rsid': '23423', 'summary': 'This is a test'}]}
+    records = [{"rsid": "rs307377", "genotype": "CT", "summary": "extra tasting ability?"},
+    {"rsid": "rs6684865", "genotype": "AA", "summary": "1.5x risk"},
+    {"rsid": "rs10492972", "genotype": "CT", "summary": "conflicting reports; possible slight increased risk for multiple sclerosis"},
+    {"rsid": "rs2003046", "genotype": "AC", "summary": "0.75x lower risk of Male Pattern Baldness."},
+    {"rsid": "rs5065", "genotype": "AA", "summary": "1.12x risk on diuretic; if hypertensive, better outcome when treated with calcium channel blocker than with diuretic"},
+    {"rsid": "rs5746059", "genotype": "AG", "summary": "slightly higher fat mass"},
+    {"rsid": "rs2697962", "genotype": "CC", "summary": "Normal risk of developing Parkinson's Disease"}]
+
+    snps = {'count': 0, 'records': records}
     return render_template('snps/report.html', snps=snps)
 
 @app.errorhandler(404)
