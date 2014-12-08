@@ -1,0 +1,37 @@
+{% extends "layout/base.html" %}
+
+{% block main %}
+<div class="col-sm-12 main">
+
+  <h1 class="page-header">SNP Report</h1>
+
+  <p>Upload your 23andme raw data file to get a more comprehensive SNP report
+  than what 23andme gives you.</p>
+
+    <form action="/23andme/report" method="POST" role="form">
+      <div class="form-group">
+        <label for="email-input">Email address</label>
+        <input type="email" class="form-control" id="email-input" placeholder="Enter email">
+        <p class="help-block">We will email you when the report has been
+        processed.</p>
+      </div>
+      <div class="form-group">
+        <label for="upload-file-input">File input</label>
+        <input type="file" id="upload-file-input">
+        <p class="help-block">Visit <a
+            href="https://23andme.com">23andme</a> to download your raw
+        SNP data and upload it here.</p>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> I agree that this report is not a
+          doctor or medical report.
+        </label>
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+  
+</div>
+
+{% endblock %}
+

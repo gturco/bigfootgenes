@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="bigfootgenes">
+    <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
 
-    <title>Report</title>
+    <title>SNP Report</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -48,14 +47,7 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-12 main">
-
-          <h1 class="page-header">SNP Report</h1>
-
-          <p>Upload your 23andme file to get a SNP report.</p>
-
-
-        </div>
+        {% block main %}{% endblock %}
       </div>
     </div>
 

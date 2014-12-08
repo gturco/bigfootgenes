@@ -4,6 +4,7 @@ bigfootgenes
 """
 
 import os
+import json
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug import secure_filename
 
@@ -31,7 +32,12 @@ else:
 @app.route('/')
 def index():
     """Render website's home page."""
-    return app.send_static_file(os.path.join('index.html'))
+    return render_template('index.html')
+
+@app.route('/help')
+def help():
+    """Render help page."""
+    return render_template('help.html')
 
 @app.route('/23andme/report', methods=['POST'])
 def create():
@@ -44,23 +50,22 @@ def create():
         # TODO queue up task or run in thread?
         output = os.path.join(app.config['SNP_REPORT_OUTPUT_FOLDER'], filename)
 
-        # import subprocess
-        # cmd = "python write_twenty_three_and_me_report.py -i {0} -o {1}".format(path, output)
-        # output = subprocess.check_output(cmd, shell=True)
+        import subprocess
+        cmd = "python write_twenty_three_and_me_report.py -i {0} -o {1}".format(path, output)
+        output = subprocess.check_output(cmd, shell=True)
 
     return render_template('queued.html')
 
 @app.route('/snps/report')
 def get():
-    records = [{"rsid": "rs307377", "genotype": "CT", "summary": "extra tasting ability?"},
-    {"rsid": "rs6684865", "genotype": "AA", "summary": "1.5x risk"},
-    {"rsid": "rs10492972", "genotype": "CT", "summary": "conflicting reports; possible slight increased risk for multiple sclerosis"},
-    {"rsid": "rs2003046", "genotype": "AC", "summary": "0.75x lower risk of Male Pattern Baldness."},
-    {"rsid": "rs5065", "genotype": "AA", "summary": "1.12x risk on diuretic; if hypertensive, better outcome when treated with calcium channel blocker than with diuretic"},
-    {"rsid": "rs5746059", "genotype": "AG", "summary": "slightly higher fat mass"},
-    {"rsid": "rs2697962", "genotype": "CC", "summary": "Normal risk of developing Parkinson's Disease"}]
+    file = os.path.join("data", "genome_tommy_chheng_snp_matches.txt")
 
-    snps = {'count': 0, 'records': records}
+    records = []
+    with open(file, 'r') as report_file:
+        for line in report_file.xreadlines():
+            records.append(json.loads(line))
+
+    snps = {'count': len(records), 'records': records}
     return render_template('snps/report.html', snps=snps)
 
 @app.errorhandler(404)
