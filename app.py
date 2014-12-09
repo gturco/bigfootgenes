@@ -3,29 +3,49 @@ bigfootgenes
 
 """
 
+import uuid
 import os
+import subprocess
 import json
-from flask import Flask, render_template, request, redirect, url_for
+import mysql.connector
+from contextlib import closing
+
+from flask import Flask, render_template, request, redirect, url_for, g
 from werkzeug import secure_filename
 
 app = Flask(__name__, static_folder='public', static_url_path='')
 
 app.debug = True
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = "/tmp/uploads"
-app.config['SNP_REPORT_OUTPUT_FOLDER'] = "/tmp/snp-reports"
+app.config['UPLOAD_FOLDER'] = "./uploads"
 ALLOWED_EXTENSIONS = set(['txt', 'tsv'])
 
-# production
 app_env = 'development'
 if 'APP_ENV' in os.environ:
    app_env = os.environ['APP_ENV']
 
+db_user = "bigfootgenes"
+db_pass = "dk34DFko99FDOQ"
+db_name = "bigfootgenes_development"
+db_url = "127.0.0.1"
+
+# overwrite any default settings for production
 if app_env == 'production':
     pass
-else:
-    pass
 
+@app.before_request
+def before_request():
+    if 'cnx_pool' in g:
+        g.conn = g.cnx_pool.get_connection()
+    else:
+        g.cnx_pool = mysql.connector.pooling.MySQLConnectionPool(pool_name="bigfootgenes_pool",
+                                                                 pool_size=10,
+                                                                 autocommit=True,
+                                                                 user=db_user,
+                                                                 password=db_pass,
+                                                                 host=db_url,
+                                                                 database=db_name)
+        g.conn = g.cnx_pool.get_connection()
 ###
 # Routing for your application.
 ###
@@ -41,29 +61,36 @@ def help():
 
 @app.route('/23andme/report', methods=['POST'])
 def create():
+    userid = uuid.uuid4() # DON"T ACCESS userid from HTTP input
     file = request.files['file']
-    if file and allowed_file(file.filename):
+
+    if file:
         filename = secure_filename(file.filename)
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
 
         # TODO queue up task or run in thread?
-        output = os.path.join(app.config['SNP_REPORT_OUTPUT_FOLDER'], filename)
-
-        import subprocess
-        cmd = "python write_twenty_three_and_me_report.py -i {0} -o {1}".format(path, output)
+        cmd = "cd bigfootgenes && python insert_23andme_report_to_mysql.py -i ../{0} -u '{1}'".format(path, userid)
         output = subprocess.check_output(cmd, shell=True)
 
-    return render_template('queued.html')
+    return render_template('queued.html', userid=userid)
 
 @app.route('/snps/report')
 def get():
-    file = os.path.join("data", "genome_tommy_chheng_snp_matches.txt")
-
+    userid = u"afsd34"
     records = []
-    with open(file, 'r') as report_file:
-        for line in report_file.xreadlines():
-            records.append(json.loads(line))
+
+    #query = ("SELECT userid, rsid, genotype, summary FROM user_snps ",
+    #         "WHERE userid = %s")
+
+    # TODO don't use this! sql injection, use %s
+    query = "SELECT userid, rsid, genotype, summary FROM user_snps WHERE userid = '{0}';".format(userid)
+
+    with closing(g.conn.cursor()) as cur:
+        cur.execute(query)
+        for (userid, rsid, genotype, summary) in cur:
+            values = {'rsid': rsid, 'genotype': genotype, 'summary': summary}
+            records.append(values)
 
     snps = {'count': len(records), 'records': records}
     return render_template('snps/report.html', snps=snps)

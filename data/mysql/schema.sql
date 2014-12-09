@@ -10,4 +10,11 @@ CREATE TABLE snps(
   PRIMARY KEY (`rsid`, `genotype`)
 );
 
+CREATE TABLE user_snps(
+  `userid` VARCHAR(45) NOT NULL,
+  `rsid` VARCHAR(45) NOT NULL,
+  `genotype` VARCHAR(2) NOT NULL,
+  `summary` VARCHAR(255),
+  PRIMARY KEY (`userid`, `rsid`)
+);
 

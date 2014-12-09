@@ -8,7 +8,7 @@
   <p>Upload your 23andme raw data file to get a more comprehensive SNP report
   than what 23andme gives you.</p>
 
-    <form action="/23andme/report" method="POST" role="form">
+    <form action="/23andme/report" enctype="multipart/form-data" method="POST">
       <div class="form-group">
         <label for="email-input">Email address</label>
         <input type="email" class="form-control" id="email-input" placeholder="Enter email">
@@ -17,7 +17,7 @@
       </div>
       <div class="form-group">
         <label for="upload-file-input">File input</label>
-        <input type="file" id="upload-file-input">
+        <input type="file" name="file" id="upload-file-input">
         <p class="help-block">Visit <a
             href="https://23andme.com">23andme</a> to download your raw
         SNP data and upload it here.</p>
