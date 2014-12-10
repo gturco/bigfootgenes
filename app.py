@@ -73,8 +73,10 @@ def create_report():
         filename = secure_filename(file.filename)
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
+    else:
+        return render_template('error.html')
 
-    #run_report(path, report_id)
+    # start in separate process to avoid blocking web request
     p = Process(target=run_report, args=(path, report_id,))
     p.start()
 
