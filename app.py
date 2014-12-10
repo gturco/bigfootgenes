@@ -3,16 +3,19 @@ bigfootgenes
 
 """
 
+import logging
 import uuid
 import os
 import subprocess
 import json
 import mysql.connector
 from contextlib import closing
+from multiprocessing import Process
 
 from flask import Flask, render_template, request, redirect, url_for, g
 from werkzeug import secure_filename
 
+logger = logging.getLogger(__name__)
 app = Flask(__name__, static_folder='public', static_url_path='')
 
 app.debug = True
@@ -59,9 +62,9 @@ def help():
     """Render help page."""
     return render_template('help.html')
 
-@app.route('/23andme/report', methods=['POST'])
-def create():
-    userid = uuid.uuid4() # DON"T ACCESS userid from HTTP input
+@app.route('/snps/reports', methods=['POST'])
+def create_report():
+    report_id = str(uuid.uuid4())
     file = request.files['file']
 
     if file:
@@ -69,22 +72,21 @@ def create():
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
 
-        # TODO queue up task or run in thread?
-        cmd = "cd bigfootgenes && python insert_23andme_report_to_mysql.py -i ../{0} -u '{1}'".format(path, userid)
-        output = subprocess.check_output(cmd, shell=True)
+    #run_report(path, report_id)
+    p = Process(target=run_report, args=(path, report_id,))
+    p.start()
 
-    return render_template('queued.html', userid=userid)
+    return render_template('queued.html', report_id=report_id)
 
-@app.route('/snps/report')
-def get():
-    userid = u"afsd34"
+@app.route('/snps/reports/<report_id>')
+def show_report(report_id):
     records = []
 
     #query = ("SELECT userid, rsid, genotype, summary FROM user_snps ",
     #         "WHERE userid = %s")
 
     # TODO don't use this! sql injection, use %s
-    query = "SELECT userid, rsid, genotype, summary FROM user_snps WHERE userid = '{0}';".format(userid)
+    query = "SELECT userid, rsid, genotype, summary FROM user_snps WHERE userid = '{0}';".format(report_id)
 
     with closing(g.conn.cursor()) as cur:
         cur.execute(query)
@@ -100,6 +102,15 @@ def page_not_found(error):
     """Custom 404 page."""
     return app.send_static_file(os.path.join('404.html'))
 
+def run_report(genotype_datafile_path, report_id):
+    cmd = ["python",
+           "bigfootgenes/insert_23andme_report_to_mysql.py",
+           "-i",
+           genotype_datafile_path,
+           "-u",
+           report_id]
+
+    subprocess.call(cmd)
+
 if __name__ == '__main__':
     app.run(debug=True)
-

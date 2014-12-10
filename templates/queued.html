@@ -1,15 +1,28 @@
 {% extends "layout/base.html" %}
 
 {% block main %}
+
 <div class="col-sm-12 main">
 
   <h1 class="page-header">Processing your data</h1>
 
-  <p>Your data is being processed and we will email you when it's done.</p>
+  <div id="wait-msg">
+      <p>Your data is being processed....</p>
+      <img src="/images/spinner.gif" alt="processing" />
+  </div>
 
-  <h4>{{userid}}</h4>
+  <div id="report-link-msg" class="hidden">
+      <h4>Your report <a href="/snps/reports/{{report_id}}">{{report_id}}</a> is finished!</h4>
+  </div>
 
 </div>
+
+<script>
+    setTimeout(function () {
+        document.getElementById("wait-msg").className = "hidden";
+        document.getElementById("report-link-msg").className = "";
+    }, 360000);
+</script>
 
 {% endblock %}
 
