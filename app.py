@@ -12,7 +12,7 @@ import mysql.connector
 from contextlib import closing
 from multiprocessing import Process
 
-from flask import Flask, render_template, request, redirect, url_for, g
+from flask import Flask, render_template, request, redirect, url_for, g, json
 from werkzeug import secure_filename
 
 logger = logging.getLogger(__name__)
@@ -41,13 +41,15 @@ def before_request():
     if 'cnx_pool' in g:
         g.conn = g.cnx_pool.get_connection()
     else:
-        g.cnx_pool = mysql.connector.pooling.MySQLConnectionPool(pool_name="bigfootgenes_pool",
-                                                                 pool_size=10,
-                                                                 autocommit=True,
-                                                                 user=db_user,
-                                                                 password=db_pass,
-                                                                 host=db_url,
-                                                                 database=db_name)
+        mysql_config = {'pool_name': "bigfootgenes_pool",
+                        'pool_size': 10,
+                        'autocommit': True,
+                        'user': db_user,
+                        'password': db_pass,
+                        'host': db_url,
+                        'database': db_name}
+
+        g.cnx_pool = mysql.connector.pooling.MySQLConnectionPool(**mysql_config)
         g.conn = g.cnx_pool.get_connection()
 ###
 # Routing for your application.
@@ -78,29 +80,34 @@ def create_report():
 
     return render_template('queued.html', report_id=report_id)
 
+@app.route('/snps/reports/<report_id>.json')
+def show_report_json(report_id):
+    snps = get_snps(report_id)
+    return json.jsonify(snps)
+
 @app.route('/snps/reports/<report_id>')
 def show_report(report_id):
-    records = []
-
-    #query = ("SELECT userid, rsid, genotype, summary FROM user_snps ",
-    #         "WHERE userid = %s")
-
-    # TODO don't use this! sql injection, use %s
-    query = "SELECT userid, rsid, genotype, summary FROM user_snps WHERE userid = '{0}';".format(report_id)
-
-    with closing(g.conn.cursor()) as cur:
-        cur.execute(query)
-        for (userid, rsid, genotype, summary) in cur:
-            values = {'rsid': rsid, 'genotype': genotype, 'summary': summary}
-            records.append(values)
-
-    snps = {'count': len(records), 'records': records}
+    snps = get_snps(report_id)
     return render_template('snps/report.html', snps=snps)
 
 @app.errorhandler(404)
 def page_not_found(error):
     """Custom 404 page."""
     return app.send_static_file(os.path.join('404.html'))
+
+def get_snps(report_id):
+    query = ("SELECT userid, rsid, genotype, summary FROM user_snps "
+             "WHERE userid = %s")
+
+    records = []
+    with closing(g.conn.cursor()) as cur:
+        cur.execute(query, (report_id,))
+        for (userid, rsid, genotype, summary) in cur:
+            values = {'rsid': rsid, 'genotype': genotype, 'summary': summary}
+            records.append(values)
+
+    snps = {'count': len(records), 'records': records}
+    return snps
 
 def run_report(genotype_datafile_path, report_id):
     cmd = ["python",

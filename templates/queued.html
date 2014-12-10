@@ -18,10 +18,67 @@
 </div>
 
 <script>
-    setTimeout(function () {
-        document.getElementById("wait-msg").className = "hidden";
-        document.getElementById("report-link-msg").className = "";
-    }, 360000);
+var done = false;
+var retries = 0;
+var MAX_RETRY = 20;
+
+function showDoneState(){
+    document.getElementById("wait-msg").className = "hidden";
+    document.getElementById("report-link-msg").className = "";
+}
+
+function checkStatus(callback){
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 ) {
+           if(xmlhttp.status == 200){
+               var res = JSON.parse(xmlhttp.responseText);
+               if (res.count > 0) {
+                    callback(null, {done: true});
+               } else {
+                    callback(null, {done: false});
+               }
+           } else {
+                callback({msg: "Error"});
+           }
+        }
+    }
+
+    xmlhttp.open("GET", "/snps/reports/{{report_id}}.json", true);
+    xmlhttp.send();
+}
+
+function check() {
+    console.log("Checking...");
+
+    if (retries > MAX_RETRY) {
+        showDoneState();
+        console.error("Max retries ran.");
+        return;
+    } else {
+        retries += 1;
+    }
+
+    checkStatus( function (err, res) {
+        if (err) {
+            return console.error(err);
+        }
+
+        if (res.done) {
+            done = true;
+        }
+
+        if (!done) {
+            setTimeout(check, 30000);
+        } else {
+            showDoneState();
+        }
+    });
+}
+
+setTimeout(check, 30000);
+
 </script>
 
 {% endblock %}
