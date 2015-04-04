@@ -27,7 +27,7 @@ def write_user_snp_to_mysql(userid, matches):
             cur.execute(stmt, values)
         print "Inserted {0} rows".format(len(matches))
     cnx.commit()
-    
+
 def main():
     parser = OptionParser()
     parser.add_option("-i", "--input", dest="input",
