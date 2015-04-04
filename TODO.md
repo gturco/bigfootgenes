@@ -21,9 +21,11 @@
 
 in 23andme data:
 
+```
 rsid	chromosome	position	genotype
 rs4477212	1	82154	AA
 rs3094315	1	752566	AA
+```
 
 check snpedia's data for rs4477212
 
@@ -32,22 +34,25 @@ if orientation is plus
 else if orientation is minus
 reverse complement the AA 23andme
 
+```
 A => T
 G => C
 C => G
 T => A
+```
 
 and flip
 
-example:
-GT => CA => AC
+example: ``GT => CA => AC``
 
 ## Database
 
+```
 rsid     genotype  summary
 Rs7412   CC        "XXX"
 Rs7412   CT        "XXX"
+```
 
 # Results:
 
-* Visulize
+* Visualize
