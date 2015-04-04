@@ -119,6 +119,9 @@ def run_report(genotype_datafile_path, report_id):
            "-u",
            report_id]
 
+    logger.info("Running")
+    logger.info(cmd)
+
     subprocess.call(cmd)
 
 if __name__ == '__main__':
