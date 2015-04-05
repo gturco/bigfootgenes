@@ -14,7 +14,7 @@ sudo apt-get install mysql-server
 ```
 
 ```
-pip install wikitools beautifulsoup4 requests mwparserfromhell
+pip install wikitools beautifulsoup4 requests mwparserfromhell flask
 
 pip install mysql-connector-python --allow-external mysql-connector-python
 
@@ -77,7 +77,6 @@ Ruby gem](http://devcenter.heroku.com/articles/using-the-cli).
 
     $ sudo easy_install pip
     $ sudo pip install virtualenv
-    $ sudo gem install foreman
 
 Now, you can setup an isolated environment with `virtualenv`.
 
@@ -93,9 +92,14 @@ environment.
 
 Now, you can run the application locally.
 
-    $ foreman start
+    $ python app.py
 
-You can also specify what port you'd prefer to use.
+On the server you can use gunicorn :
 
-    $ foreman start -p 5555
+    $ sudo gunicorn --log-level=info --log-file=bigfootgenes.log -w 2 -b 0.0.0.0:80 --timeout 600 app:app
 
+Long timeout because of long upload times. TOFIX by placing nginx in
+front.
+
+Setup gunicorn/nginx on centos7
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-centos-7

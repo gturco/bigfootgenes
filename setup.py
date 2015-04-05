@@ -10,6 +10,8 @@ requires = (
         "wikitools",
         "mwlib",
         "mwparserfromhell",
+        "flask",
+        "gunicorn"
         )
 
 def read(fname):
